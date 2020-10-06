@@ -33,8 +33,8 @@ RUN apt-get update \
 FROM python:3.8-slim-buster as main
 # Install dependencies
 COPY requirements.txt requirements.txt
-RUN pip3 install --upgrade pip wheel setuptools \
- && pip3 install -r requirements.txt
+RUN pip3 install --no-cache-dir --upgrade pip wheel setuptools \
+ && pip3 install --no-cache-dir -r requirements.txt
 
 COPY --from=builder /pdftron/PDFNetWrappers/PDFNetC/Lib /pdftron
 # Server source files
