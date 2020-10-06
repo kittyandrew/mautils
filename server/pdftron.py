@@ -1,5 +1,5 @@
 import site
-site.addsitedir("/pdftron/PDFNetWrappers/PDFNetC/Lib")
+site.addsitedir("/pdftron")
 from PDFNetPython import *
 import sys
 

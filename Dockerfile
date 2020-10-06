@@ -1,5 +1,4 @@
-FROM ubuntu:latest
-
+FROM ubuntu:latest as builder
 # Install dependencies
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
@@ -27,23 +26,17 @@ RUN apt-get update \
  && make \
  && make install \
  && cd .. \
- && rm -rf Build \
- \
- # Clean up
- && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    wget \
-    git \
-    build-essential \
-    cmake \
-    swig \
- && rm -rf /var/lib/apt/lists/* \
- && apt-get clean
+ && rm -rf Build
 
+
+# Main stuff
+FROM python:3.8-slim-buster as main
 # Install dependencies
 COPY requirements.txt requirements.txt
 RUN pip3 install --upgrade pip wheel setuptools \
  && pip3 install -r requirements.txt
 
+COPY --from=builder /pdftron/PDFNetWrappers/PDFNetC/Lib /pdftron
 # Server source files
 COPY server server
 # Launch
