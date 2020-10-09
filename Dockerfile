@@ -1,4 +1,4 @@
-FROM ubuntu:latest as builder
+FROM ubuntu:latest as pdftron-builder
 # Install dependencies
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
@@ -29,14 +29,20 @@ RUN apt-get update \
  && rm -rf Build
 
 
+FROM python:3.8-slim-buster as reqs-builder
+WORKDIR /svc
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir --upgrade pip wheel setuptools \
+ && pip3 wheel -r requirements.txt --wheel-dir=/svc/wheels
+
 # Main stuff
 FROM python:3.8-slim-buster as main
 # Install dependencies
-COPY requirements.txt requirements.txt
-RUN pip3 install --no-cache-dir --upgrade pip wheel setuptools \
- && pip3 install --no-cache-dir -r requirements.txt
+COPY --from=reqs-builder /svc/wheels /svc/wheels
+COPY requirements.txt .
+RUN pip3 install --no-index --find-links=/svc/wheels -r requirements.txt
 
-COPY --from=builder /pdftron/PDFNetWrappers/PDFNetC/Lib /pdftron
+COPY --from=pdftron-builder /pdftron/PDFNetWrappers/PDFNetC/Lib /pdftron
 # Server source files
 COPY server server
 # Launch
