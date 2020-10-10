@@ -2,8 +2,8 @@ version: "3.7"
 
 services:
   service:
-    container_name: nextcloud-mautils
-    image: nextcloud-mautils
+    container_name: mautils
+    image: mautils
     build:
       context: .
     restart: unless-stopped
