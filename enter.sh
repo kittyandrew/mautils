@@ -1,1 +1,1 @@
-docker exec -it nextcloud-mautils /bin/sh
+docker exec -it mautoolz /bin/sh

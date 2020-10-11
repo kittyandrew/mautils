@@ -2,8 +2,8 @@ version: "3.7"
 
 services:
   service:
-    container_name: mautils
-    image: mautils
+    container_name: mautoolz
+    image: mautoolz
     build:
       context: .
     restart: unless-stopped
