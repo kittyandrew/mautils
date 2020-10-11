@@ -9,7 +9,7 @@ import secrets
 import shutil
 import os
 
-app = Sanic(name="mautils")
+app = Sanic(name="mautoolz")
 
 
 @app.route("/api/compress/pdf", methods=['POST'])
@@ -25,7 +25,13 @@ async def api_compress_pdf(request):
             result_fp = tmp_dir / file_obj.name
 
             if not file_obj.name.endswith(".pdf") or not file_obj.type == "application/pdf":
-                return response.json({"status": 400, "message": "Wrong file (or format). Only '.pdf' can be compressed here"}, status=400)
+                return response.json(
+                    {
+                        "status": 500,
+                        "message": "Wrong file (or format). Only '.pdf' can be compressed here"
+                    },
+                    status=500
+                )
 
             async with aiofiles.open(tmp_fp, "wb") as tmp:
                 await tmp.write(file_obj.body)
@@ -56,7 +62,7 @@ async def api_compress_pdf(request):
             # Remove tmp dir after processing
             shutil.rmtree(tmp_dir)
 
-    return response.json({"status": 400, "message": "No file recieved"}, status=400)
+    return response.json({"status": 500, "message": "No file recieved"}, status=500)
 
 
 if __name__ == "__main__":
