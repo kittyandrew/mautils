@@ -1,4 +1,4 @@
-from subprocess import Popen, PIPE
+from subprocess import STDOUT, check_output
 
 SUPPORTED_TYPES = [
     "epub",
@@ -6,7 +6,5 @@ SUPPORTED_TYPES = [
 
 
 def convert_to_pdf(input_fp, output_fp):
-    p = Popen(["ebook-convert", str(input_fp), str(output_fp)], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    output, err = p.communicate()
-    rc = p.returncode
-    return output, err, rc
+    output = check_output(f"ebook-convert {input_fp} {output_fp}", stderr=STDOUT, timeout=60)
+    return output
