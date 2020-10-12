@@ -95,13 +95,13 @@ async def api_convert_pdf(request):
 
             loop = asyncio.get_event_loop()
             with concurrent.futures.ProcessPoolExecutor() as pool:
-                await loop.run_in_executor(
+                status = await loop.run_in_executor(
                     pool,
                     functools.partial(
                         convert_to_pdf, tmp_fp, result_fp
                     )
                 )
-
+            logging.info(f"Status: {status}")
             logging.info(f"Finished converting {file_obj.name}! New PDF: {filename}.pdf")
             return await response.file(result_fp)
 
