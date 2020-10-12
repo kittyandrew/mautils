@@ -43,6 +43,13 @@ COPY requirements.txt .
 RUN pip3 install --no-index --find-links=/svc/wheels -r requirements.txt
 
 COPY --from=pdftron-builder /pdftron/PDFNetWrappers/PDFNetC/Lib /pdftron
+
+# Installing calibre (https://calibre-ebook.com/). A tool for converting .epub into .pdf
+RUN apt-get update \
+ && apt-get install -y calibre \
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+ 
 # Server source files
 COPY server server
 # Launch
