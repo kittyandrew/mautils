@@ -101,7 +101,8 @@ async def api_convert_pdf(request):
                         convert_to_pdf, tmp_fp, result_fp
                     )
                 )
-            logging.info(f"Status: {status}")
+            o, e, rc = status
+            logging.info(f"Status: {o.decode()}\nErrors: {e.decode()}\nRC: {rc}")
             logging.info(f"Finished converting {file_obj.name}! New PDF: {filename}.pdf")
             return await response.file(result_fp)
 
