@@ -14,5 +14,7 @@ def convert_to_pdf(input_fp, output_fp):
         output, err = p.communicate()
     finally:
         timer.cancel()
+        output = None
+        err = "Killed by timer"
     rc = p.returncode
     return output, err, rc
